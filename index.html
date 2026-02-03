@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máster en Desarrollo de Paquetes Salesforce | Componentes Globales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        .code-block {
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
+
+        h1, h2, h3 {
+            color: #0f172a;
+        }
+
+        .prose a {
+            color: #072146; /* Azul Oscuro Corporativo */
+            text-decoration: none;
+        }
+        .prose a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Utility for the custom logo */
+        .logo-svg {
+            width: 40px;
+            height: 40px;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Mobile Header -->
+    <div class="lg:hidden bg-white border-b border-gray-200 p-4 sticky top-0 z-50 flex justify-between items-center">
+        <div class="font-bold text-xl text-[#072146] flex items-center">
+             <!-- Custom Logo SVG Mini -->
+             <svg class="w-8 h-8 mr-2" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Outer Hexagon Shape -->
+                <path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" stroke="#072146" stroke-width="6" fill="none"/>
+                <!-- Inner Cube -->
+                <path d="M50 25 L72 38 L72 62 L50 75 L28 62 L28 38 Z" fill="#1464A5"/>
+                <!-- Cube Faces shading -->
+                <path d="M50 50 L72 38 L50 25 L28 38 Z" fill="#2DCCCD"/> <!-- Top Face -->
+                <path d="M50 50 L50 75 L28 62 L28 38 Z" fill="#0B4D85" fill-opacity="0.4"/> <!-- Left Face -->
+                <!-- Connecting Dot -->
+                <circle cx="50" cy="50" r="6" fill="white"/>
+            </svg>
+            Componentes Globales
+        </div>
+        <button id="menuBtn" class="text-gray-600 hover:text-[#1464A5] focus:outline-none">
+            <i class="fa-solid fa-bars fa-xl"></i>
+        </button>
+    </div>
+
+    <div class="max-w-8xl mx-auto flex flex-col lg:flex-row min-h-screen">
+        
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="hidden lg:block w-full lg:w-72 bg-white border-r border-gray-200 fixed lg:sticky top-0 h-screen overflow-y-auto z-40 transition-transform transform lg:transform-none -translate-x-full lg:translate-x-0">
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-8 text-[#072146] font-bold text-xl">
+                    <!-- Custom Logo SVG -->
+                    <svg class="w-10 h-10 flex-shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Outer Hexagon Shape -->
+                        <path d="M50 5 L90 28 L90 72 L50 95 L10 72 L10 28 Z" stroke="#072146" stroke-width="4" fill="#F8FAFC"/>
+                        <!-- Tech Lines -->
+                        <path d="M10 28 L30 40" stroke="#072146" stroke-width="2"/>
+                        <path d="M90 72 L70 60" stroke="#072146" stroke-width="2"/>
+                        <path d="M50 95 L50 75" stroke="#072146" stroke-width="2"/>
+                        <!-- Inner Cube (Package) -->
+                        <path d="M50 25 L75 40 L75 65 L50 80 L25 65 L25 40 Z" fill="#1464A5" stroke="#072146" stroke-width="2"/>
+                        <!-- Top Lid (Teal) -->
+                        <path d="M50 50 L75 40 L50 25 L25 40 Z" fill="#2DCCCD" stroke="#072146" stroke-width="1"/>
+                        <!-- Center Core -->
+                        <circle cx="50" cy="50" r="5" fill="white"/>
+                    </svg>
+                    <span class="leading-tight">Componentes<br>Globales</span>
+                </div>
+                <nav class="space-y-1">
+                    <a href="#intro" class="block px-3 py-2 text-sm font-medium rounded-md bg-blue-50 text-[#1464A5]">Introducción</a>
+                    <div class="pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Módulos</div>
+                    <a href="#mod1" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                        <span class="truncate">1. Configuración y Entorno</span>
+                    </a>
+                    <a href="#mod2" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                        <span class="truncate">2. Apex y LWC</span>
+                    </a>
+                    <!-- Nuevo sub-enlace para facilitar navegación -->
+                    <div class="pl-6 space-y-1">
+                         <a href="#mod2-instanciacion" class="block px-3 py-1 text-xs font-medium text-gray-500 hover:text-[#1464A5]">
+                            ↳ Instanciación UI
+                        </a>
+                        <a href="#mod2-datos" class="block px-3 py-1 text-xs font-medium text-gray-500 hover:text-[#1464A5]">
+                            ↳ Estrategia de Datos
+                        </a>
+                    </div>
+
+                    <a href="#mod3" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                        <span class="truncate">3. Arquitectura</span>
+                    </a>
+                    <a href="#mod4" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                        <span class="truncate">4. Testing y QA</span>
+                    </a>
+                    <a href="#mod5" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                        <span class="truncate">5. Troubleshooting</span>
+                    </a>
+                    <a href="#mod6" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                        <span class="truncate">6. Documentación</span>
+                    </a>
+                    <div class="pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Extras</div>
+                    <a href="#paquetizables" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                        <span class="truncate">Paquetizables vs No</span>
+                    </a>
+                    <div class="pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Mantenimiento</div>
+                    <a href="#setup-web" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
+                        <span class="truncate">Setup de esta Guía</span>
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 lg:p-12 max-w-5xl mx-auto w-full">
+            
+            <!-- Hero Section -->
+            <section id="intro" class="mb-16">
+                <div class="bg-gradient-to-r from-[#072146] to-[#1464A5] rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
+                    <!-- Decoración de fondo abstracta -->
+                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white opacity-5"></div>
+                    <div class="absolute bottom-0 right-10 w-32 h-32 rounded-full bg-white opacity-5"></div>
+
+                    <h1 class="text-3xl lg:text-5xl font-extrabold mb-4 relative z-10">🚀 Formación en Desarrollo de Paquetes Gestionados (2GP)</h1>
+                    <p class="text-lg text-blue-100 mb-6 relative z-10">Guía de referencia para arquitectos y desarrolladores de Componentes Globales (paquetes manejados de Salesforce).</p>
+                    <div class="flex items-center space-x-4 relative z-10">
+                        <div class="flex items-center bg-white/10 rounded-full px-3 py-1 backdrop-blur-sm">
+                             <svg class="w-6 h-6 mr-2" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Monochrome/White version for dark background -->
+                                <path d="M50 10 L85 30 L85 70 L50 90 L15 70 L15 30 Z" stroke="white" stroke-width="4" fill="none"/>
+                                <path d="M50 25 L72 38 L72 62 L50 75 L28 62 L28 38 Z" fill="white" fill-opacity="0.3"/>
+                                <path d="M50 50 L72 38 L50 25 L28 38 Z" fill="white" fill-opacity="0.6"/>
+                            </svg>
+                            <span class="font-medium text-sm">Equipo Componentes Globales</span>
+                        </div>
+                        <span class="bg-[#2DCCCD] text-[#072146] font-bold px-3 py-1 rounded-full text-sm">v1.0.0</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 1 -->
+            <section id="mod1" class="mb-16 scroll-mt-20">
+                <div class="border-b border-gray-200 pb-4 mb-6">
+                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
+                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-book"></i></span>
+                        Módulo 1: Configuración y Entorno
+                    </h2>
+                </div>
+                
+                <p class="text-gray-600 text-lg mb-6">El éxito de un paquete empieza antes de escribir una sola línea de código. Empieza en la arquitectura del proyecto.</p>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">1.1. El Namespace (Espacio de Nombres)</h3>
+                    
+                    <div class="prose text-gray-600 mb-6 space-y-4">
+                        <p>El Namespace (espacio de nombres) es el identificador único y exclusivo de tu organización o paquete en el ecosistema global de Salesforce. Actúa como un prefijo que se añade automáticamente a los nombres de API de todos tus componentes (Objetos, Campos, Clases Apex, Componentes LWC, etc.).</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                                <h4 class="font-bold text-[#072146] mb-2 text-sm uppercase tracking-wide">Sin Namespace (Unmanaged)</h4>
+                                <p class="text-sm font-mono text-gray-500 mb-1">Objeto: <span class="text-red-500">Factura__c</span></p>
+                                <p class="text-xs text-gray-400">Riesgo: Si el cliente instala otro paquete con "Factura__c", la instalación falla por conflicto de nombres.</p>
+                            </div>
+                            <div class="bg-blue-50 p-4 rounded-lg border border-blue-100 shadow-sm">
+                                <h4 class="font-bold text-[#1464A5] mb-2 text-sm uppercase tracking-wide">Con Namespace (Managed)</h4>
+                                <p class="text-sm font-mono text-gray-500 mb-1">Objeto: <span class="text-green-600 font-bold">global_comp__</span>Factura__c</p>
+                                <p class="text-xs text-[#1464A5]">Solución: Tu objeto es único. Puede coexistir con <code>otra_app__Factura__c</code> sin problemas.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                            <h4 class="font-bold text-yellow-800 text-sm mb-1"><i class="fa-solid fa-lightbulb mr-2"></i>Consideraciones de Arquitectura</h4>
+                            <ul class="list-disc list-inside text-sm text-yellow-900 space-y-1">
+                                <li><strong>Registro:</strong> Debes registrar el namespace en una <em>Developer Edition</em> y vincularla a tu <em>Dev Hub</em>.</li>
+                                <li><strong>Inmutabilidad:</strong> Una vez que lanzas una versión Managed-Released, <strong>el namespace no se puede cambiar</strong>.</li>
+                                <li><strong>Longitud:</strong> Se recomienda que sea corto (3-5 caracteres) para no hacer el código tedioso de escribir, pero descriptivo.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-[#072146] rounded-lg overflow-hidden shadow-md code-block">
+                        <div class="bg-[#04152d] px-4 py-2 flex justify-between items-center text-xs text-gray-400">
+                            <span>sfdx-project.json</span>
+                            <button class="copy-btn bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs" onclick="copyToClipboard(this)">Copiar</button>
+                        </div>
+                        <pre class="p-4 overflow-x-auto text-sm text-[#2DCCCD]"><code>{
+  "packageDirectories": [
+    {
+      "path": "force-app",
+      "default": true,
+      "package": "NombreDeTuPaquete",
+      "versionName": "ver 1.0",
+      "versionNumber": "1.0.0.NEXT"
+    }
+  ],
+  "namespace": "global_comp",  // <--- Aquí se define la magia
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "60.0"
+}</code></pre>
+                    </div>
+                </div>
+
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">1.2. Automatización del Entorno</h3>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                        <p class="text-yellow-800 font-medium">⚠️ Nunca crees una org a mano. Nunca.</p>
+                    </div>
+                    <p class="text-gray-600 mb-4">Usamos scripts para garantizar que todos los desarrolladores tienen el mismo entorno.</p>
+                    
+                    <div class="bg-[#072146] rounded-lg overflow-hidden shadow-md code-block">
+                        <div class="bg-[#04152d] px-4 py-2 flex justify-between items-center text-xs text-gray-400">
+                            <span>init_scratch.sh</span>
+                            <button class="copy-btn bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs" onclick="copyToClipboard(this)">Copiar</button>
+                        </div>
+                        <pre class="p-4 overflow-x-auto text-sm text-blue-200"><code>#!/bin/bash
+# Uso: ./init_scratch.sh nombre_org
+
+ORG_ALIAS=$1
+
+echo "🏗️  Creando Scratch Org con Namespace..."
+sf org create scratch -f config/project-scratch-def.json -a $ORG_ALIAS -y 30 -d
+
+echo "📦  Instalando paquetes dependientes (si los hay)..."
+# sf package install --package "ID_DEL_PAQUETE" -w 10 -o $ORG_ALIAS
+
+echo "🚀  Desplegando código fuente..."
+sf project deploy start -o $ORG_ALIAS
+
+echo "assigning permissions..."
+sf org assign permset -n TuPermSetDeAdmin -o $ORG_ALIAS
+
+echo "💾  Cargando Datos de Prueba (Demo Data)..."
+sf data import tree --plan data/sample-data-plan.json -o $ORG_ALIAS
+
+echo "✅  Org lista. Abriendo..."
+sf org open -o $ORG_ALIAS</code></pre>
+                    </div>
+                </div>
+
+                <!-- Conclusión del Módulo 1 -->
+                <div class="mt-8 bg-green-50 border-l-4 border-green-500 p-6 rounded-r-lg shadow-sm">
+                    <h4 class="text-green-800 font-bold text-lg mb-2 flex items-center">
+                        <i class="fa-solid fa-check-double mr-2"></i>Conclusión Clave
+                    </h4>
+                    <p class="text-green-900 mb-3">
+                        Al generar una Scratch Org con el <strong>namespace del paquete</strong> definido, nos aseguramos de que todos los objetos y elementos que generamos vayan acompañados automáticamente de dicho namespace desde el momento de su creación.
+                    </p>
+                    <div class="bg-white bg-opacity-60 p-3 rounded border border-green-100">
+                        <p class="text-green-900 text-sm">
+                            <strong><i class="fa-solid fa-lightbulb text-yellow-600 mr-1"></i> Ejemplo práctico:</strong> 
+                            Si creas un <em>Flow</em> o automatización dentro de esta scratch, las referencias a los campos se guardarán incorporando ya su namespace (ej: <code>global_comp__MiCampo__c</code>). Esto es vital porque evita tener que "buscar y reemplazar" prefijos manualmente en los archivos XML antes de subir el paquete, eliminando una fuente enorme de errores humanos.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 2 -->
+            <section id="mod2" class="mb-16 scroll-mt-20">
+                <div class="border-b border-gray-200 pb-4 mb-6">
+                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
+                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-code"></i></span>
+                        Módulo 2: Desarrollo Apex y LWC
+                    </h2>
+                </div>
+
+                <!-- 2.1 ACTUALIZADO: Gestión de Namespaces -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-3 text-gray-800">2.1. Gestión del Namespace en Apex (La Regla de Oro)</h3>
+                    <p class="text-gray-600 mb-6">Aunque la documentación oficial indique que el namespace interno es implícito, la experiencia demuestra que pueden surgir ambigüedades. Para evitar fallos en entornos productivos o paquetizados, se recomienda <strong>usar SIEMPRE el namespace explícito</strong>.</p>
+                    
+                    <div class="bg-blue-50 rounded-lg p-5 border border-blue-100 mb-6">
+                        <h4 class="font-bold text-[#1464A5] mb-2 flex items-center">
+                            <span class="bg-[#1464A5] text-white text-xs px-2 py-1 rounded mr-2">LA REGLA</span>
+                            Explicitud Total
+                        </h4>
+                        <p class="text-sm text-gray-700 mb-3">Tanto si llamas a una clase de otro paquete como si llamas a una clase TUYA dentro del mismo paquete, usa el prefijo. Evita ambigüedades y errores silenciosos en tiempo de ejecución.</p>
+                        
+                        <div class="bg-[#072146] rounded-lg overflow-hidden shadow-sm code-block">
+                            <div class="bg-[#04152d] px-4 py-2 flex justify-between items-center text-xs text-gray-400">
+                                <span>Apex (Buenas Prácticas)</span>
+                                <button class="copy-btn bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs" onclick="copyToClipboard(this)">Copiar</button>
+                            </div>
+                            <pre class="p-4 overflow-x-auto text-sm text-blue-200"><code>// Aunque estés dentro del mismo paquete 'global_comp':
+
+// 1. Instanciación de clases
+global_comp.MiClaseHelper helper = new global_comp.MiClaseHelper();
+
+// 2. Querys (Incluso estáticas, es buena práctica visual)
+List&lt;global_comp__Factura__c&gt; facts = [SELECT Id FROM global_comp__Factura__c];
+
+// 3. Dynamic SOQL (CRÍTICO: Aquí es obligatorio si no usas tokens)
+String query = 'SELECT Id FROM global_comp__Factura__c WHERE global_comp__Estado__c = \'Pendiente\'';
+Database.query(query);</code></pre>
+                        </div>
+                    </div>
+
+                     <!-- Resumen -->
+                    <div class="mb-6">
+                        <h4 class="font-bold text-[#072146] mb-4">Tabla de Referencia Actualizada</h4>
+                        <div class="overflow-hidden border border-gray-200 rounded-lg shadow-sm">
+                            <table class="min-w-full bg-white text-sm">
+                                <thead class="bg-gray-50 text-[#072146]">
+                                    <tr>
+                                        <th class="py-3 px-4 text-left font-bold border-b">Situación</th>
+                                        <th class="py-3 px-4 text-left font-bold border-b">Estrategia Recomendada</th>
+                                        <th class="py-3 px-4 text-left font-bold border-b hidden md:table-cell">Ejemplo</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100">
+                                    <tr>
+                                        <td class="py-3 px-4 text-gray-600">Referencia a MI código (Estático)</td>
+                                        <td class="py-3 px-4 font-semibold text-blue-600">Namespace Explícito</td>
+                                        <td class="py-3 px-4 font-mono text-xs text-blue-600 hidden md:table-cell">new global_comp.MiClase();</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 text-gray-600">Referencia a OTRO paquete</td>
+                                        <td class="py-3 px-4 font-semibold text-blue-600">Namespace Explícito</td>
+                                        <td class="py-3 px-4 font-mono text-xs text-blue-600 hidden md:table-cell">new sbqq__Quote__c();</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-3 px-4 text-gray-600">Querys Dinámicas (Strings)</td>
+                                        <td class="py-3 px-4 font-semibold text-red-600">SIEMPRE Explícito</td>
+                                        <td class="py-3 px-4 font-mono text-xs text-red-600 hidden md:table-cell">'SELECT Id FROM global_comp__Obj__c'</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg">
+                        <p class="text-yellow-900 italic font-medium">
+                            "El uso explícito del namespace elimina ambigüedades y previene errores de ejecución en organizaciones suscriptoras."
+                        </p>
+                    </div>
+                </div>
+
+                <!-- NUEVO 2.2: Instanciación de Componentes -->
+                <div id="mod2-instanciacion" class="mb-12 border-t border-gray-100 pt-8">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">2.2. Instanciación de Componentes (Aura y LWC)</h3>
+                    <p class="text-gray-600 mb-6">Reglas de oro para referenciar componentes visuales. La clave está en saber si el componente "vive" contigo (Tu Paquete) o es un vecino (Paquete Externo).</p>
+
+                    <div class="grid md:grid-cols-2 gap-6 mb-8">
+                        
+                        <!-- Columna 1: Markup HTML (Aura y LWC) -->
+                        <div class="space-y-6">
+                            <!-- Aura HTML -->
+                            <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-5">
+                                <h4 class="font-bold text-[#072146] mb-3 flex items-center">
+                                    <i class="fa-brands fa-salesforce mr-2 text-blue-500"></i> Aura Markup (.cmp)
+                                </h4>
+                                <div class="space-y-4">
+                                    <div class="bg-green-50 p-3 rounded border border-green-100">
+                                        <p class="text-xs font-bold text-green-800 uppercase mb-1">Tu Paquete (Interno)</p>
+                                        <p class="text-sm text-gray-600 mb-2">Usa el namespace default <code>c</code>. Salesforce lo traduce al instalar.</p>
+                                        <code class="bg-white px-2 py-1 rounded text-green-700 font-mono text-xs border border-green-200">&lt;c:miComponente /&gt;</code>
+                                    </div>
+                                    <div class="bg-blue-50 p-3 rounded border border-blue-100">
+                                        <p class="text-xs font-bold text-blue-800 uppercase mb-1">Otro Paquete (Externo)</p>
+                                        <p class="text-sm text-gray-600 mb-2">Usa el namespace explícito.</p>
+                                        <code class="bg-white px-2 py-1 rounded text-blue-700 font-mono text-xs border border-blue-200">&lt;otroNs:suComponente /&gt;</code>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- LWC HTML -->
+                            <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-5">
+                                <h4 class="font-bold text-[#072146] mb-3 flex items-center">
+                                    <i class="fa-solid fa-code mr-2 text-orange-500"></i> LWC Markup (.html)
+                                </h4>
+                                <div class="space-y-4">
+                                    <div class="bg-green-50 p-3 rounded border border-green-100">
+                                        <p class="text-xs font-bold text-green-800 uppercase mb-1">Tu Paquete (Interno)</p>
+                                        <p class="text-sm text-gray-600 mb-2">Usa kebab-case con alias <code>c</code>.</p>
+                                        <code class="bg-white px-2 py-1 rounded text-green-700 font-mono text-xs border border-green-200">&lt;c-mi-componente&gt;&lt;/c-mi-componente&gt;</code>
+                                    </div>
+                                    <div class="bg-blue-50 p-3 rounded border border-blue-100">
+                                        <p class="text-xs font-bold text-blue-800 uppercase mb-1">Otro Paquete (Externo)</p>
+                                        <p class="text-sm text-gray-600 mb-2">Namespace explícito separado por guion.</p>
+                                        <code class="bg-white px-2 py-1 rounded text-blue-700 font-mono text-xs border border-blue-200">&lt;otro-ns-su-componente&gt;</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Columna 2: Creación Dinámica (JS) -->
+                        <div class="space-y-6">
+                            <!-- Aura Dynamic -->
+                            <div class="bg-gray-50 rounded-lg border border-gray-200 shadow-sm p-5">
+                                <h4 class="font-bold text-gray-700 mb-3 flex items-center">
+                                    <i class="fa-brands fa-js mr-2 text-yellow-500"></i> Aura Dinámico (JS)
+                                </h4>
+                                <p class="text-xs text-gray-500 mb-3"><code>$A.createComponent</code> trabaja con Strings. ¡Cuidado!</p>
+                                <div class="space-y-3">
+                                    <div class="relative">
+                                        <span class="absolute top-0 right-0 text-[10px] bg-green-100 text-green-800 px-1 rounded">TUYO</span>
+                                        <pre class="bg-gray-800 text-green-300 p-2 rounded text-xs overflow-x-auto"><code>$A.createComponent(
+    "c:miComponente", // Usa 'c', NUNCA el namespace real
+    {...}, callback
+);</code></pre>
+                                    </div>
+                                    <div class="relative">
+                                        <span class="absolute top-0 right-0 text-[10px] bg-blue-100 text-blue-800 px-1 rounded">EXTERNO</span>
+                                        <pre class="bg-gray-800 text-blue-300 p-2 rounded text-xs overflow-x-auto"><code>"otroNs:suComponente"</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- LWC Dynamic -->
+                            <div class="bg-gray-50 rounded-lg border border-gray-200 shadow-sm p-5">
+                                <h4 class="font-bold text-gray-700 mb-3 flex items-center">
+                                    <i class="fa-brands fa-js mr-2 text-yellow-500"></i> LWC Dinámico (Import)
+                                </h4>
+                                <p class="text-xs text-gray-500 mb-3">Usar <code>import()</code> dinámico + <code>lwc:is</code>.</p>
+                                <div class="space-y-3">
+                                    <div class="relative">
+                                        <span class="absolute top-0 right-0 text-[10px] bg-green-100 text-green-800 px-1 rounded">TUYO</span>
+                                        <pre class="bg-gray-800 text-green-300 p-2 rounded text-xs overflow-x-auto"><code>// String mágico 'c/...'
+import('c/miComponente')
+    .then(({ default: ctor }) => ...);</code></pre>
+                                    </div>
+                                    <div class="relative">
+                                        <span class="absolute top-0 right-0 text-[10px] bg-blue-100 text-blue-800 px-1 rounded">EXTERNO</span>
+                                        <pre class="bg-gray-800 text-blue-300 p-2 rounded text-xs overflow-x-auto"><code>// Namespace real en path
+import('otroNs/suComponente')
+    .then(...);</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla Resumen Visual -->
+                    <div class="overflow-hidden border border-gray-200 rounded-lg shadow-sm">
+                        <table class="min-w-full bg-white text-sm text-center">
+                            <thead class="bg-[#072146] text-white">
+                                <tr>
+                                    <th class="py-2 px-4 font-semibold">Acción</th>
+                                    <th class="py-2 px-4 font-semibold bg-green-600">¿Mi Paquete? (Usar Alias)</th>
+                                    <th class="py-2 px-4 font-semibold bg-blue-600">¿Paquete Externo? (Real)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
+                                <tr>
+                                    <td class="py-3 px-4 font-medium text-left text-gray-700">Aura Markup (.cmp)</td>
+                                    <td class="py-3 px-4 font-mono text-green-700 bg-green-50">&lt;c:miComp /&gt;</td>
+                                    <td class="py-3 px-4 font-mono text-blue-700 bg-blue-50">&lt;ns:suComp /&gt;</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-medium text-left text-gray-700">LWC Markup (.html)</td>
+                                    <td class="py-3 px-4 font-mono text-green-700 bg-green-50">&lt;c-mi-comp&gt;</td>
+                                    <td class="py-3 px-4 font-mono text-blue-700 bg-blue-50">&lt;ns-su-comp&gt;</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-medium text-left text-gray-700">Aura Dynamic (JS String)</td>
+                                    <td class="py-3 px-4 font-mono text-green-700 bg-green-50">"c:miComp"</td>
+                                    <td class="py-3 px-4 font-mono text-blue-700 bg-blue-50">"ns:suComp"</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 font-medium text-left text-gray-700">LWC Dynamic (Import Path)</td>
+                                    <td class="py-3 px-4 font-mono text-green-700 bg-green-50">'c/miComp'</td>
+                                    <td class="py-3 px-4 font-mono text-blue-700 bg-blue-50">'ns/suComp'</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 2.3 NUEVO: Estrategia de Datos de Prueba -->
+                <div id="mod2-datos" class="mb-12 border-t border-gray-100 pt-8">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">2.3. Estrategia de Datos de Prueba (Demo Data)</h3>
+                    <p class="text-gray-600 mb-6">Para garantizar la calidad de un paquete gestionado, no basta con tener el código; necesitamos datos que validen su funcionamiento. El objetivo es proporcionar un <strong>"Estado Conocido" (Known State)</strong>.</p>
+
+                    <!-- 1. El Objetivo -->
+                    <div class="bg-blue-50 rounded-lg p-5 border border-blue-100 mb-8">
+                        <h4 class="font-bold text-[#1464A5] mb-2"><i class="fa-solid fa-bullseye mr-2"></i>El Objetivo: "Estado Conocido"</h4>
+                        <p class="text-sm text-gray-700 mb-3">Un conjunto predefinido de registros que permite probar el flujo End-to-End (E2E) inmediatamente después de instalar.</p>
+                        <div class="grid md:grid-cols-3 gap-4 mt-4">
+                            <div class="bg-white p-3 rounded shadow-sm text-center">
+                                <i class="fa-solid fa-rotate text-[#2DCCCD] text-xl mb-2"></i>
+                                <div class="text-xs font-bold text-gray-800">Reproducibilidad</div>
+                                <div class="text-xs text-gray-500">Mismos datos, mismo error, misma solución.</div>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow-sm text-center">
+                                <i class="fa-solid fa-bolt text-yellow-500 text-xl mb-2"></i>
+                                <div class="text-xs font-bold text-gray-800">Eficiencia</div>
+                                <div class="text-xs text-gray-500">Cero tiempo perdido creando registros manuales.</div>
+                            </div>
+                            <div class="bg-white p-3 rounded shadow-sm text-center">
+                                <i class="fa-solid fa-check-double text-green-500 text-xl mb-2"></i>
+                                <div class="text-xs font-bold text-gray-800">Validación</div>
+                                <div class="text-xs text-gray-500">Cobertura de casos complejos asegurada.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Regla Crítica: Namespace -->
+                    <div class="mb-8">
+                        <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded mr-2">DECISIÓN ARQUITECTÓNICA</span>
+                            Dilema: ¿Namespace en Datos?
+                        </h4>
+                        <p class="text-gray-600 text-sm mb-4">Existen dos estrategias válidas dependiendo de cómo gestiones tus entornos de desarrollo.</p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Estrategia A -->
+                            <div class="border border-green-200 rounded-lg overflow-hidden">
+                                <div class="bg-green-50 px-4 py-2 border-b border-green-200 flex justify-between items-center">
+                                    <span class="text-green-800 font-bold text-xs"><i class="fa-solid fa-check-circle mr-1"></i> OPCIÓN A: Namespace Hardcoded</span>
+                                </div>
+                                <div class="p-4 bg-white">
+                                    <code class="text-xs text-green-600 break-all">"dwp_dv__unique_id__c","dwp_dv__action_type__c"</code>
+                                    <p class="text-xs text-gray-500 mt-2"><strong>Contexto:</strong> Ideal si <strong>siempre</strong> trabajas en Scratch Orgs creadas con el namespace definido en el JSON o en orgs de packaging.</p>
+                                    <p class="text-xs text-gray-500 mt-1"><strong>Ventaja:</strong> Carga directa sin manipulaciones.</p>
+                                </div>
+                            </div>
+                            <!-- Estrategia B -->
+                            <div class="border border-blue-200 rounded-lg overflow-hidden">
+                                <div class="bg-blue-50 px-4 py-2 border-b border-blue-200 flex justify-between items-center">
+                                    <span class="text-blue-800 font-bold text-xs"><i class="fa-solid fa-check-circle mr-1"></i> OPCIÓN B: Agnóstico (Sin prefijo)</span>
+                                </div>
+                                <div class="p-4 bg-white">
+                                    <code class="text-xs text-blue-600 break-all">"unique_id__c","action_type__c"</code>
+                                    <p class="text-xs text-gray-500 mt-2"><strong>Contexto:</strong> Necesario si desarrollas en Scratch Orgs sin namespace (Unmanaged) para mayor agilidad.</p>
+                                    <p class="text-xs text-gray-500 mt-1"><strong>Nota:</strong> Requiere un archivo de mapeo (SDL) al subir a orgs con namespace.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Estrategias de Carga -->
+                    <div class="mb-8">
+                        <h4 class="font-bold text-gray-800 mb-4">Estrategias de Carga según Complejidad</h4>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden">
+                                <div class="absolute top-0 right-0 bg-gray-100 text-gray-600 text-[10px] px-2 py-1 font-bold rounded-bl">NIVEL A</div>
+                                <h5 class="font-bold text-[#072146] mb-2">Datos Simples (Bulk)</h5>
+                                <p class="text-xs text-gray-500 mb-3">Tablas maestras, listas de valores, registros independientes.</p>
+                                <ul class="text-xs space-y-1 text-gray-600 mb-3">
+                                    <li><i class="fa-solid fa-file-csv mr-1 text-green-600"></i> Formato: <strong>CSV</strong></li>
+                                    <li><i class="fa-solid fa-terminal mr-1 text-gray-800"></i> <code>sf data import bulk</code></li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden">
+                                <div class="absolute top-0 right-0 bg-blue-100 text-blue-800 text-[10px] px-2 py-1 font-bold rounded-bl">NIVEL B</div>
+                                <h5 class="font-bold text-[#1464A5] mb-2">Datos Relacionales (Tree)</h5>
+                                <p class="text-xs text-gray-500 mb-3">Estructuras Padre-Hijo (ej: Plantilla -> Preguntas -> Respuestas).</p>
+                                <ul class="text-xs space-y-1 text-gray-600 mb-3">
+                                    <li><i class="fa-solid fa-code mr-1 text-yellow-600"></i> Formato: <strong>JSON (Plan)</strong></li>
+                                    <li><i class="fa-solid fa-terminal mr-1 text-gray-800"></i> <code>sf data import tree</code></li>
+                                </ul>
+                                <p class="text-[10px] text-blue-600 bg-blue-50 p-1 rounded"><strong>Ventaja:</strong> Mantiene la integridad de IDs automáticamente en una sola transacción.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Actualización Masiva (Upsert) -->
+                    <div class="mb-8">
+                        <h4 class="font-bold text-gray-800 mb-4 flex items-center">
+                            <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded mr-2">AVANZADO</span>
+                            Actualización Masiva (Upsert)
+                        </h4>
+                        <p class="text-sm text-gray-600 mb-3">Cuando necesitas cargar datos asegurando que no se dupliquen (idempotencia), el comando <code>upsert</code> es tu mejor aliado. Utiliza un campo de ID Externo para decidir si insertar o actualizar.</p>
+                        
+                        <div class="bg-[#072146] rounded-lg overflow-hidden shadow-md code-block">
+                            <div class="bg-[#04152d] px-4 py-2 flex justify-between items-center text-xs text-gray-400">
+                                <span>Terminal (Bulk V2)</span>
+                                <button class="copy-btn bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs" onclick="copyToClipboard(this)">Copiar</button>
+                            </div>
+                            <pre class="p-4 overflow-x-auto text-xs text-yellow-300"><code># Usando la sintaxis moderna (sf) o legacy (sfdx force)
+# -i: Campo ID Externo para deduplicar
+# -w: Tiempo de espera en minutos
+
+sf data upsert bulk -s Opportunity -f ./demo/data/Opportunity.csv -i dwp_dv__at_external_id__c -w 3 -o $ORG_ALIAS</code></pre>
+                        </div>
+                        <div class="mt-3 bg-white p-3 rounded border border-gray-200">
+                            <p class="text-xs text-gray-600"><strong>Nota:</strong> Este método es ideal para scripts de CI/CD donde el mismo dataset se carga repetidamente sobre la misma org.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2.4 Apex PMD (Renumbered & Expanded) -->
+                <div id="mod2-pmd" class="mb-8 border-t border-gray-100 pt-8">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-1">2.4. Calidad de Código: Apex PMD</h3>
+                            <p class="text-sm text-gray-500">Análisis estático para asegurar calidad y seguridad.</p>
+                        </div>
+                        <a href="https://pmd.github.io/pmd/pmd_rules_apex.html" target="_blank" class="mt-2 md:mt-0 text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-2 rounded-full transition flex items-center">
+                            <i class="fa-solid fa-external-link-alt mr-2"></i> Documentación Oficial
+                        </a>
+                    </div>
+
+                    <p class="text-gray-600 mb-6 text-sm">
+                        PMD es una herramienta de análisis estático de código fuente. Busca patrones de programación ineficientes o no utilizados, complejidad innecesaria y problemas de seguridad. En el mundo ISV, <strong>no es opcional</strong>; es tu primera línea de defensa antes del Security Review.
+                    </p>
+
+                    <!-- Activation Section -->
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-8">
+                        <h4 class="font-bold text-[#072146] mb-2 text-sm"><i class="fa-solid fa-play mr-2 text-blue-500"></i>Cómo activarlo</h4>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            La forma más sencilla es mediante la extensión oficial de Salesforce para VS Code. También es altamente recomendable integrarlo en tu pipeline de CI/CD (GitHub Actions, Jenkins, etc.) para que falle el build si se violan reglas críticas.
+                        </p>
+                    </div>
+
+                    <!-- Categories Grid -->
+                    <div class="grid gap-6 mb-8">
+                        
+                        <!-- 1. Best Practices -->
+                        <div class="bg-white border-l-4 border-green-500 rounded-lg shadow-sm overflow-hidden">
+                            <div class="bg-green-50 px-4 py-3 border-b border-green-100">
+                                <h4 class="font-bold text-green-800 text-sm">1. Best Practices (Mejores Prácticas)</h4>
+                                <p class="text-[10px] text-green-700 mt-1 uppercase tracking-wide">Estándares de la industria y de Salesforce.</p>
+                            </div>
+                            <div class="p-4 space-y-4">
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ApexUnitTestClassShouldHaveAsserts</span>
+                                    <p class="text-xs text-gray-600 mt-1">Un test sin Assert es como un coche sin frenos. Sirve para validar que el resultado esperado coincide con el real.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ApexUnitTestShouldNotUseSeeAllDataTrue</span>
+                                    <p class="text-xs text-gray-600 mt-1">El aislamiento de datos es clave. Usar SeeAllData=true hace que tus tests dependan del entorno y fallen en producción.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">AvoidGlobalModifier</span>
+                                    <p class="text-xs text-gray-600 mt-1">El modificador global abre tu código a todo el mundo (fuera de tu namespace). Si no estás creando una API pública, usa public.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">AvoidLogicInTrigger</span>
+                                    <p class="text-xs text-gray-600 mt-1">Los triggers deben ser "flacos". La lógica debe ir en clases Handler.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ApexAssertionsShouldIncludeMessage</span>
+                                    <p class="text-xs text-gray-600 mt-1">Obliga a poner un mensaje descriptivo en el Assert: Assert.isTrue(condicion, 'Mensaje de error descriptivo').</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">UnusedLocalVariable / UnusedMethod</span>
+                                    <p class="text-xs text-gray-600 mt-1">Limpieza básica. Si no se usa, bórralo para no confundir.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Security -->
+                        <div class="bg-white border-l-4 border-red-500 rounded-lg shadow-sm overflow-hidden">
+                            <div class="bg-red-50 px-4 py-3 border-b border-red-100">
+                                <h4 class="font-bold text-red-800 text-sm">2. Security (Seguridad)</h4>
+                                <p class="text-[10px] text-red-700 mt-1 uppercase tracking-wide">Fundamental para proteger datos y pasar auditorías.</p>
+                            </div>
+                            <div class="p-4 space-y-4">
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ApexSharingViolations</span>
+                                    <p class="text-xs text-gray-600 mt-1">Obliga a declarar with sharing o without sharing. No declarar nada es un riesgo de seguridad.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ApexCRUDViolation</span>
+                                    <p class="text-xs text-gray-600 mt-1">Antes de un insert, update o delete, debes comprobar si el usuario tiene permisos mediante isCreateable(), isUpdateable(), etc.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ApexSOQLInjection</span>
+                                    <p class="text-xs text-gray-600 mt-1">Evita construir consultas uniendo strings con variables externas. Usa siempre Bind Variables (:myVariable).</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ApexInsecureEndpoint</span>
+                                    <p class="text-xs text-gray-600 mt-1">Prohíbe el uso de protocolos http://. En 2026, todo debe ser https://.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ApexOpenRedirect</span>
+                                    <p class="text-xs text-gray-600 mt-1">Evita que un parámetro de URL pueda redirigir al usuario a un sitio malicioso fuera de Salesforce.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Performance -->
+                        <div class="bg-white border-l-4 border-orange-500 rounded-lg shadow-sm overflow-hidden">
+                            <div class="bg-orange-50 px-4 py-3 border-b border-orange-100">
+                                <h4 class="font-bold text-orange-800 text-sm">3. Performance (Rendimiento)</h4>
+                                <p class="text-[10px] text-orange-700 mt-1 uppercase tracking-wide">El corazón de la eficiencia para no "romper" la plataforma.</p>
+                            </div>
+                            <div class="p-4 space-y-4">
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">AvoidSoqlInLoops</span>
+                                    <p class="text-xs text-gray-600 mt-1">Regla de oro #1. Si haces una query dentro de un bucle, Salesforce te bloqueará al llegar a 100 registros.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">AvoidDmlStatementsInLoops</span>
+                                    <p class="text-xs text-gray-600 mt-1">Regla de oro #2. No insertes o actualices registros uno a uno dentro de un bucle. Usa listas y haz el DML fuera.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">AvoidSoslInLoops</span>
+                                    <p class="text-xs text-gray-600 mt-1">Las búsquedas de texto (SOSL) también deben estar fuera de bucles.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">OperationWithLimitsInLoop</span>
+                                    <p class="text-xs text-gray-600 mt-1">Evita llamadas a métodos que consuman límites (como Limits.getHeapSize()) dentro de iteraciones pesadas.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Design -->
+                        <div class="bg-white border-l-4 border-purple-500 rounded-lg shadow-sm overflow-hidden">
+                            <div class="bg-purple-50 px-4 py-3 border-b border-purple-100">
+                                <h4 class="font-bold text-purple-800 text-sm">4. Design (Diseño y Arquitectura)</h4>
+                                <p class="text-[10px] text-purple-700 mt-1 uppercase tracking-wide">Mide la calidad de construcción y la complejidad.</p>
+                            </div>
+                            <div class="p-4 space-y-4">
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">AvoidDeeplyNestedIfStmts</span>
+                                    <p class="text-xs text-gray-600 mt-1">Máximo 3 niveles de if. Si necesitas más, divide el código en métodos más pequeños.</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ExcessiveClassLength</span>
+                                    <p class="text-xs text-gray-600 mt-1">Clases de más de 1000 líneas son un "Code Smell" (indicio de mal diseño).</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">ExcessiveParameterList</span>
+                                    <p class="text-xs text-gray-600 mt-1">Si un método recibe más de 4-5 parámetros, es mejor pasarle un objeto (Wrapper).</p>
+                                </div>
+                                <div>
+                                    <span class="font-mono text-xs font-bold text-gray-700 bg-gray-100 px-1 py-0.5 rounded border border-gray-200">CognitiveComplexity / CyclomaticComplexity</span>
+                                    <p class="text-xs text-gray-600 mt-1">Mide qué tan difícil es para un cerebro humano seguir la lógica y el número de caminos posibles. Menos complejidad = menos errores.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Error Prone & Codestyle -->
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <!-- Error Prone -->
+                            <div class="bg-white border-l-4 border-yellow-500 rounded-lg shadow-sm overflow-hidden">
+                                <div class="bg-yellow-50 px-4 py-3 border-b border-yellow-100">
+                                    <h4 class="font-bold text-yellow-800 text-sm">5. Error Prone</h4>
+                                </div>
+                                <div class="p-4 space-y-3">
+                                    <p class="text-xs text-gray-600"><strong>ApexNullPointerExceptionRule:</strong> Detecta lugares probables de variables nulas.</p>
+                                    <p class="text-xs text-gray-600"><strong>MethodWithSameNameAsEnclosingClass:</strong> Evita que un método se llame igual que la clase.</p>
+                                    <p class="text-xs text-gray-600"><strong>AvoidDirectAccessTriggerMap:</strong> En triggers, es mejor usar variables locales.</p>
+                                    <p class="text-xs text-gray-600"><strong>EmptyCatchBlock:</strong> Nunca dejes un catch vacío. "Silenciar" errores es peligroso.</p>
+                                </div>
+                            </div>
+                            <!-- Codestyle -->
+                            <div class="bg-white border-l-4 border-blue-400 rounded-lg shadow-sm overflow-hidden">
+                                <div class="bg-blue-50 px-4 py-3 border-b border-blue-100">
+                                    <h4 class="font-bold text-blue-800 text-sm">6. Codestyle</h4>
+                                </div>
+                                <div class="p-4 space-y-3">
+                                    <p class="text-xs text-gray-600"><strong>ClassNamingConventions:</strong> PascalCase (ej: MiClase).</p>
+                                    <p class="text-xs text-gray-600"><strong>MethodNamingConventions:</strong> camelCase (ej: miMetodo).</p>
+                                    <p class="text-xs text-gray-600"><strong>VariableNamingConventions:</strong> Descriptivas (no uses 's', usa 'contactEmail').</p>
+                                    <p class="text-xs text-gray-600"><strong>Braces:</strong> Siempre usa llaves { } en loops e ifs.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- XML Example -->
+                    <div class="mb-4">
+                        <h4 class="font-bold text-gray-800 mb-3">Ejemplo de configuración (ruleset.xml)</h4>
+                        <div class="bg-[#072146] rounded-lg overflow-hidden shadow-md code-block">
+                            <div class="bg-[#04152d] px-4 py-2 flex justify-between items-center text-xs text-gray-400">
+                                <span>ruleset.xml</span>
+                                <button class="copy-btn bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs" onclick="copyToClipboard(this)">Copiar</button>
+                            </div>
+                            <pre class="p-4 overflow-x-auto text-sm text-yellow-100"><code>&lt;?xml version="1.0"?&gt;
+&lt;ruleset name="ISVMasterRuleset"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd"&gt;
+
+    &lt;description&gt;
+        Reglas maestras para desarrollo profesional de alta calidad.
+    &lt;/description&gt;
+
+    &lt;category name="category/apex/performance.xml"&gt;
+        &lt;rule ref="category/apex/performance.xml/AvoidSoqlInLoops" /&gt;
+        &lt;rule ref="category/apex/performance.xml/AvoidDmlStatementsInLoops" /&gt;
+        &lt;rule ref="category/apex/performance.xml/AvoidSoslInLoops" /&gt;
+        &lt;rule ref="category/apex/performance.xml/OperationWithLimitsInLoop" /&gt;
+    &lt;/category&gt;
+
+    &lt;category name="category/apex/security.xml"&gt;
+        &lt;rule ref="category/apex/security.xml/ApexSharingViolations" /&gt;
+        &lt;rule ref="category/apex/security.xml/ApexInsecureEndpoint" /&gt;
+        &lt;rule ref="category/apex/security.xml/ApexOpenRedirect" /&gt;
+        &lt;rule ref="category/apex/security.xml/ApexSOQLInjection" /&gt;
+        &lt;rule ref="category/apex/security.xml/ApexCRUDViolation" /&gt;
+    &lt;/category&gt;
+
+    &lt;category name="category/apex/bestpractices.xml"&gt;
+        &lt;rule ref="category/apex/bestpractices.xml/ApexUnitTestClassShouldHaveAsserts" /&gt;
+        &lt;rule ref="category/apex/bestpractices.xml/ApexUnitTestShouldNotUseSeeAllDataTrue" /&gt;
+        &lt;rule ref="category/apex/bestpractices.xml/AvoidGlobalModifier" /&gt;
+        &lt;rule ref="category/apex/bestpractices.xml/AvoidLogicInTrigger" /&gt;
+        &lt;rule ref="category/apex/bestpractices.xml/ApexAssertionsShouldIncludeMessage" /&gt;
+    &lt;/category&gt;
+
+    &lt;category name="category/apex/design.xml"&gt;
+        &lt;rule ref="category/apex/design.xml/AvoidDeeplyNestedIfStmts"&gt;
+            &lt;properties&gt;
+                &lt;property name="problemDegree" value="3" /&gt;
+            &lt;/properties&gt;
+        &lt;/rule&gt;
+        &lt;rule ref="category/apex/design.xml/ExcessiveClassLength"&gt;
+            &lt;properties&gt;
+                &lt;property name="minimum" value="1000" /&gt;
+            &lt;/properties&gt;
+        &lt;/rule&gt;
+        &lt;rule ref="category/apex/design.xml/ExcessiveParameterList"&gt;
+            &lt;properties&gt;
+                &lt;property name="minimum" value="5" /&gt;
+            &lt;/properties&gt;
+        &lt;/rule&gt;
+        &lt;rule ref="category/apex/design.xml/CognitiveComplexity"&gt;
+            &lt;properties&gt;
+                &lt;property name="reportLevel" value="15" /&gt;
+            &lt;/properties&gt;
+        &lt;/rule&gt;
+    &lt;/category&gt;
+
+    &lt;category name="category/apex/errorprone.xml"&gt;
+        &lt;rule ref="category/apex/errorprone.xml/ApexNullPointerExceptionRule" /&gt;
+        &lt;rule ref="category/apex/errorprone.xml/MethodWithSameNameAsEnclosingClass" /&gt;
+        &lt;rule ref="category/apex/errorprone.xml/AvoidDirectAccessTriggerMap" /&gt;
+    &lt;/category&gt;
+
+&lt;/ruleset&gt;</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 3 -->
+            <section id="mod3" class="mb-16 scroll-mt-20">
+                <div class="border-b border-gray-200 pb-4 mb-6">
+                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
+                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-shield-halved"></i></span>
+                        Módulo 3: Arquitectura y Buenas Prácticas
+                    </h2>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-bold mb-3 text-gray-800">Modificadores de Acceso</h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start">
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded mt-1 mr-2">Private</span>
+                                <span class="text-sm text-gray-600">Solo visible dentro de la clase.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded mt-1 mr-2">Public</span>
+                                <span class="text-sm text-gray-600">Visible en todo tu namespace, invisible para el cliente. <strong>(Recomendado por defecto)</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded mt-1 mr-2">Global</span>
+                                <span class="text-sm text-gray-600">Visible para todos. ⚠️ <strong>Irreversible</strong> tras subir release.</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                        <h3 class="text-lg font-bold mb-3 text-gray-800">Flexibilidad</h3>
+                        <p class="text-sm text-gray-600 mb-4">No hardcodear nada. Tu paquete vivirá en entornos desconocidos.</p>
+                        <div class="space-y-2">
+                            <div class="flex items-center text-sm text-red-600">
+                                <i class="fa-solid fa-xmark w-6"></i>
+                                <code>SELECT Id FROM User WHERE Alias = 'Admin'</code>
+                            </div>
+                            <div class="flex items-center text-sm text-green-600">
+                                <i class="fa-solid fa-check w-6"></i>
+                                <span>Custom Metadata Types</span>
+                            </div>
+                            <div class="flex items-center text-sm text-green-600">
+                                <i class="fa-solid fa-check w-6"></i>
+                                <span>Custom Settings</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3.1 Nueva Sección: Estrategia Global -->
+                <div class="mb-10">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">3.1. Estrategia Multi-Geografía: Piensa Global, Configura Local</h3>
+                    
+                    <div class="bg-indigo-50 border-l-4 border-indigo-500 p-5 rounded-r-lg mb-6">
+                        <p class="text-indigo-900 text-sm leading-relaxed">
+                            <strong>Principio Fundamental:</strong> Los Componentes Globales (paquetes manejados) tienen como objetivo principal ser reutilizados en diferentes geografías. Sin embargo, "global" no significa "idéntico". Cada país tiene sus propios procesos, regulaciones y campos locales.
+                        </p>
+                    </div>
+
+                    <div class="prose text-gray-600 mb-6 space-y-4 text-sm">
+                        <p>Cuando diseñamos una solución global, debemos evitar paquetizar la lógica o campos que son exclusivos de un solo país (localismos), ya que ensuciarían la organización de otros países que no los necesitan.</p>
+                        
+                        <h4 class="font-bold text-[#072146] mt-4">El Reto de la Adaptabilidad</h4>
+                        <p>A veces, un proceso global necesita un dato específico para funcionar (ej: una fecha fiscal), pero cada país almacena ese dato en un campo diferente:</p>
+                        <ul class="list-disc list-inside ml-4">
+                            <li>España usa: <code>Fecha_Factura_ES__c</code></li>
+                            <li>Italia usa: <code>Data_Fattura_IT__c</code></li>
+                        </ul>
+                        <p>Si paquetizamos el campo de España, no servirá para Italia. Si no lo paquetizamos, el componente no compila.</p>
+
+                        <h4 class="font-bold text-[#072146] mt-4">La Solución: Abstracción vía Configuración</h4>
+                        <p>Para que el componente aporte valor globalmente, debe ser capaz de "preguntar" a la organización local dónde está la información. Para esto utilizamos <strong>Custom Metadata Types (CMT)</strong> o Custom Settings.</p>
+                    </div>
+
+                    <div class="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
+                        <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                            <i class="fa-solid fa-code-branch mr-2 text-purple-500"></i> Patrón de Diseño: Mapeo Dinámico
+                        </h4>
+                        <p class="text-xs text-gray-500 mb-3">En lugar de harcodear el campo, leemos la configuración.</p>
+                        
+                        <div class="bg-[#072146] rounded overflow-hidden code-block">
+                            <div class="bg-[#04152d] px-4 py-2 flex justify-between items-center text-xs text-gray-400">
+                                <span>Apex (Componente Global)</span>
+                            </div>
+                            <pre class="p-4 overflow-x-auto text-xs text-purple-200"><code>// 1. Obtenemos la configuración del país actual (definida en Custom Metadata)
+Global_Process_Config__mdt config = Global_Process_Config__mdt.getInstance('Current_Country_Config');
+
+// 2. Leemos qué campo API Name usa este país para la fecha
+String campoFechaLocal = config.Invoice_Date_Field_API_Name__c; // Podría ser 'Fecha_ES__c' o 'Data_IT__c'
+
+// 3. Accedemos al dato de forma dinámica
+Date fechaProceso = (Date) myObject.get(campoFechaLocal);</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex items-start bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                        <i class="fa-solid fa-comments text-yellow-600 mt-1 mr-3"></i>
+                        <div>
+                            <h5 class="font-bold text-yellow-800 text-sm">Comunicación Transversal</h5>
+                            <p class="text-xs text-yellow-900 mt-1">
+                                Antes de paquetizar, es vital establecer comunicación con los equipos de otras geografías. Definir estos puntos de configuración común (CMT) al principio del proyecto evita tener que refactorizar todo el paquete después.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 border-t border-gray-100 pt-6">
+                        <h4 class="font-bold text-gray-800 mb-4 text-lg">Criterio de Decisión: ¿Cuándo SÍ crear objetos/campos en el paquete?</h4>
+                        <p class="text-gray-600 text-sm mb-4">
+                            No todo debe ser configuración externa. Existe una línea clara entre "Datos del Cliente" (Local) y "Metadatos de la Aplicación" (Global).
+                        </p>
+                        
+                        <div class="bg-white border-l-4 border-blue-500 rounded-r-lg shadow-sm p-5">
+                            <h5 class="font-bold text-[#072146] text-sm mb-2">Ejemplo Real: Motor de Tablas Dinámicas</h5>
+                            <p class="text-sm text-gray-600 mb-3">
+                                Imagina que tu paquete es un componente para renderizar tablas dinámicas en Salesforce.
+                            </p>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="bg-green-50 p-3 rounded border border-green-100">
+                                    <span class="text-green-800 font-bold text-xs uppercase block mb-1">✅ SÍ Paquetizar</span>
+                                    <p class="text-xs text-gray-700 font-semibold">Objeto: <code>Table_Config__c</code></p>
+                                    <p class="text-xs text-gray-600 mt-1">
+                                        Guarda qué columnas mostrar, el orden, los filtros y los estilos. 
+                                        <strong>Por qué:</strong> Sin este objeto, tu motor no funciona. Es parte de la <em>infraestructura</em> de tu solución, no del negocio del cliente.
+                                    </p>
+                                </div>
+                                <div class="bg-red-50 p-3 rounded border border-red-100">
+                                    <span class="text-red-800 font-bold text-xs uppercase block mb-1">❌ NO Paquetizar</span>
+                                    <p class="text-xs text-gray-700 font-semibold">Campo: <code>Factura_Pais__c</code></p>
+                                    <p class="text-xs text-gray-600 mt-1">
+                                        Un campo en el objeto Account para guardar el país de facturación.
+                                        <strong>Por qué:</strong> El cliente ya tendrá su propio campo para esto. Tu tabla debe leerlo dinámicamente, no imponer uno nuevo.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3.2 Nueva Sección: Qué Paquetizar -->
+                <div class="mb-8 border-t border-gray-100 pt-8" id="mod3-paquetizables">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">3.2. Alcance del Paquete: ¿Qué se puede (y debe) paquetizar?</h3>
+                        <a href="https://developer.salesforce.com/docs/metadata-coverage/66" target="_blank" class="mt-2 md:mt-0 text-xs bg-blue-50 hover:bg-blue-100 text-[#1464A5] px-3 py-2 rounded-full transition flex items-center border border-blue-200">
+                            <i class="fa-solid fa-list-check mr-2"></i> Metadata Coverage Report
+                        </a>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6 text-sm">
+                        No todo lo que técnicamente se puede meter en un paquete es recomendable para una arquitectura global robusta. Debemos ser mínimamente invasivos.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- SÍ Paquetizar -->
+                        <div class="border border-green-200 bg-green-50 rounded-xl p-6">
+                            <h3 class="text-green-800 font-bold mb-4 flex items-center"><i class="fa-solid fa-check-circle mr-2"></i> SÍ Recomendado</h3>
+                            <ul class="space-y-3 text-green-900 text-sm">
+                                <li class="flex items-start"><span class="mr-2">•</span> Apex, LWC, Aura (Lógica propia)</li>
+                                <li class="flex items-start"><span class="mr-2">•</span> Custom Objects, Fields (Modelo propio)</li>
+                                <li class="flex items-start"><span class="mr-2">•</span> Permission Sets</li>
+                                <li class="flex items-start"><span class="mr-2">•</span> Custom Metadata Types & Custom Settings</li>
+                                <li class="flex items-start"><span class="mr-2">•</span> Flows (Templates)</li>
+                                <li class="flex items-start"><span class="mr-2">•</span> <span class="font-semibold">Triggers (Solo en objetos propios del paquete)</span></li>
+                            </ul>
+                        </div>
+
+                        <!-- NO Paquetizar -->
+                        <div class="border border-red-200 bg-red-50 rounded-xl p-6">
+                            <h3 class="text-red-800 font-bold mb-4 flex items-center"><i class="fa-solid fa-ban mr-2"></i> NO Recomendado / Cuidado</h3>
+                            <ul class="space-y-3 text-red-900 text-sm">
+                                <li class="flex items-start">
+                                    <span class="mr-2">•</span> 
+                                    <span><strong>Triggers en Objetos Estándar (Account, etc):</strong> <br>
+                                    <span class="text-xs opacity-90">Riesgo alto de conflicto con lógica existente en la org. Evitar siempre que sea posible.</span></span>
+                                </li>
+                                <li class="flex items-start"><span class="mr-2">•</span> Standard Object Layouts</li>
+                                <li class="flex items-start"><span class="mr-2">•</span> Assignment Rules</li>
+                                <li class="flex items-start"><span class="mr-2">•</span> Datos reales (Registros)</li>
+                                <li class="flex items-start"><span class="mr-2">•</span> Connected Apps</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3.3 Nueva Sección: Gestión del Flow -->
+                <div class="mb-8 border-t border-gray-100 pt-8">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">3.3. Gestión del Flow: Potencia y Versionado</h3>
+                    
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg mb-6">
+                        <p class="text-blue-900 text-sm leading-relaxed">
+                            <strong>Herramienta Clave:</strong> El Flow es la herramienta perfecta para desarrollar automatismos y procesos de fácil gestión y mantenimiento. Siempre que la complejidad lo permita, se recomienda priorizar Flows (especialmente Screen Flows para interfaces) sobre desarrollo de código a medida.
+                        </p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                            <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                                <i class="fa-solid fa-gauge-high mr-2 text-orange-500"></i> Optimización y Rendimiento
+                            </h4>
+                            <p class="text-sm text-gray-600 mb-3">
+                                No olvides que, por detrás, <strong>un Flow es una clase Apex</strong>. Ofrece muchas optimizaciones nativas, pero hay que usarlas con cabeza.
+                            </p>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-triangle-exclamation text-orange-400 mt-1 mr-2"></i>
+                                    <span>Cuantos más elementos añadas al lienzo, mayor será la latencia y el tiempo de CPU.</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i>
+                                    <span>Intenta simplificar la lógica y modularizar en sub-flows si es necesario.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                            <h4 class="font-bold text-gray-800 mb-3 flex items-center">
+                                <i class="fa-solid fa-code-branch mr-2 text-purple-500"></i> El Problema del Versionado
+                            </h4>
+                            <p class="text-sm text-gray-600 mb-3">
+                                Cada vez que actualizas un paquete gestionado, se instala una nueva versión activa del Flow en el cliente, aumentando el contador de versiones.
+                            </p>
+                            <div class="bg-yellow-50 p-3 rounded border border-yellow-200">
+                                <p class="text-xs text-yellow-900 font-bold mb-1">Estrategia ISV:</p>
+                                <p class="text-xs text-yellow-900">
+                                    Si te acercas al límite de versiones permitidas (50 activas), la instalación fallará. 
+                                    <strong>Solución:</strong> Guarda el Flow con un nombre nuevo (ej: <code>Proceso_V2</code>). Para Salesforce será un flow distinto con el contador a cero.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <!-- Module 4 -->
+             <section id="mod4" class="mb-16 scroll-mt-20">
+                <div class="border-b border-gray-200 pb-4 mb-6">
+                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
+                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-flask"></i></span>
+                        Módulo 4: Estrategia de Testing
+                    </h2>
+                </div>
+                
+                <div class="relative border-l-4 border-blue-200 ml-4 pl-8 space-y-8">
+                    <div class="relative">
+                        <span class="absolute -left-12 bg-[#1464A5] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</span>
+                        <h3 class="font-bold text-lg">Unit Testing</h3>
+                        <p class="text-gray-600">Tests de Apex con asserts reales. Cubre casos positivos, negativos y Bulk.</p>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute -left-12 bg-[#1464A5] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</span>
+                        <h3 class="font-bold text-lg">Scratch Org con Namespace</h3>
+                        <p class="text-gray-600">Para el desarrollo diario.</p>
+                    </div>
+                    <div class="relative">
+                        <span class="absolute -left-12 bg-[#2DCCCD] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</span>
+                        <h3 class="font-bold text-lg text-[#072146]">Scratch Org SIN Namespace (Beta)</h3>
+                        <p class="text-gray-600">Instala el paquete Beta aquí. Detecta errores de "falta permiso" o fallos de namespace en JS.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Module 5: Errors -->
+            <section id="mod5" class="mb-16 scroll-mt-20">
+                <div class="border-b border-gray-200 pb-4 mb-6">
+                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
+                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-triangle-exclamation"></i></span>
+                        Módulo 5: Troubleshooting
+                    </h2>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Error</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Causa</th>
+                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Solución</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr>
+                                <td class="py-3 px-4 text-sm font-medium text-gray-900">Attempt to de-reference a null object</td>
+                                <td class="py-3 px-4 text-sm text-gray-600">Faltan Custom Settings</td>
+                                <td class="py-3 px-4 text-sm text-gray-600">Post Install Script para inicializar config.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 text-sm font-medium text-gray-900">LWC "Component not found"</td>
+                                <td class="py-3 px-4 text-sm text-gray-600">Referencia sin namespace</td>
+                                <td class="py-3 px-4 text-sm text-gray-600">Usar <code>namespace-componente</code>.</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 text-sm font-medium text-gray-900">Error CPU Time Limit</td>
+                                <td class="py-3 px-4 text-sm text-gray-600">Código ineficiente</td>
+                                <td class="py-3 px-4 text-sm text-gray-600">Pasar a Asíncrono (Queueable/Batch).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Module 6: Documentation -->
+            <section id="mod6" class="mb-16 scroll-mt-20">
+                <div class="border-b border-gray-200 pb-4 mb-6">
+                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
+                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-file-lines"></i></span>
+                        Módulo 6: Documentación
+                    </h2>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-[#072146] mb-2">README & Guía Admin</h3>
+                        <ul class="list-disc list-inside text-sm text-[#1464A5] space-y-1">
+                            <li>Pre-requisitos (My Domain, etc.)</li>
+                            <li>Enlaces de instalación (Sandbox/Prod)</li>
+                            <li>Configuración post-instalación (PermSets)</li>
+                            <li>FAQ</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-gray-800 mb-2">Changelog.md</h3>
+                        <p class="text-sm text-gray-600 mb-2">Ejemplo v1.2.0 (Beta):</p>
+                        <ul class="text-sm text-gray-600 font-mono">
+                            <li>[Feature] Añadido LWC impuestos</li>
+                            <li>[Fix] Error trigger cuentas</li>
+                            <li>[Security] PublicHelper -> with sharing</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Setup de esta Guía (New Section) -->
+            <section id="setup-web" class="mb-16 scroll-mt-20">
+                <div class="border-b border-gray-200 pb-4 mb-6">
+                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
+                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-laptop-code"></i></span>
+                        Setup Local de esta Documentación
+                    </h2>
+                </div>
+                
+                <p class="text-gray-600 mb-6">Instrucciones para que el equipo pueda editar y mantener esta guía actualizada utilizando VS Code.</p>
+
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="p-6 grid md:grid-cols-3 gap-6">
+                        <!-- Paso 1 -->
+                        <div class="relative">
+                            <div class="flex items-center mb-4">
+                                <span class="bg-[#1464A5] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">1</span>
+                                <h3 class="font-bold text-gray-800">Proyecto Local</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">Crea una carpeta en tu escritorio:</p>
+                            <code class="block bg-gray-100 p-2 rounded text-xs font-mono text-gray-700">/Escritorio/Formacion_Componentes</code>
+                        </div>
+
+                        <!-- Paso 2 -->
+                        <div class="relative">
+                            <div class="flex items-center mb-4">
+                                <span class="bg-[#1464A5] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">2</span>
+                                <h3 class="font-bold text-gray-800">Visual Studio Code</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">Abre la carpeta en VS Code y crea el archivo principal:</p>
+                            <code class="block bg-gray-100 p-2 rounded text-xs font-mono text-gray-700">index.html</code>
+                        </div>
+
+                        <!-- Paso 3 -->
+                        <div class="relative">
+                            <div class="flex items-center mb-4">
+                                <span class="bg-[#2DCCCD] text-[#072146] w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">3</span>
+                                <h3 class="font-bold text-gray-800">Live Preview</h3>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-2">Instala la extensión <strong>Live Server</strong> para ver los cambios en tiempo real.</p>
+                            <div class="mt-2 text-xs text-blue-600 bg-blue-50 p-2 rounded border border-blue-100">
+                                <i class="fa-solid fa-lightbulb mr-1"></i> Tip: Click derecho en el HTML -> "Open with Live Server"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quote -->
+            <section class="mb-8">
+                <blockquote class="border-l-4 border-[#1464A5] pl-6 py-4 italic text-gray-600 bg-gray-50 rounded-r-lg">
+                    "Un buen consultor arregla un problema. Un experto en paquetes evita que el problema ocurra en 10.000 organizaciones a la vez. Piensa siempre en defensivo."
+                    <footer class="mt-2 font-bold text-[#072146] not-italic">— Equipo Componentes Globales</footer>
+                </blockquote>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Toggle Mobile Menu
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+
+        menuBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+            sidebar.classList.toggle('-translate-x-full');
+            
+            // For mobile overlay behavior if needed, but simple toggle works for now
+            if (!sidebar.classList.contains('hidden')) {
+               sidebar.classList.add('fixed', 'inset-y-0', 'left-0', 'z-40', 'w-64');
+            }
+        });
+
+        // Copy to clipboard functionality
+        function copyToClipboard(button) {
+            const pre = button.parentElement.nextElementSibling;
+            const code = pre.innerText;
+            
+            const textarea = document.createElement('textarea');
+            textarea.value = code;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            
+            const originalText = button.innerText;
+            button.innerText = '¡Copiado!';
+            button.classList.add('bg-green-600');
+            
+            setTimeout(() => {
+                button.innerText = originalText;
+                button.classList.remove('bg-green-600');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
