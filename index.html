@@ -1605,24 +1605,72 @@ private class MiTest {
                         Módulo 6: Documentación
                     </h2>
                 </div>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div class="bg-blue-50 p-6 rounded-lg">
-                        <h3 class="font-bold text-[#072146] mb-2">README & Guía Admin</h3>
-                        <ul class="list-disc list-inside text-sm text-[#1464A5] space-y-1">
-                            <li>Pre-requisitos (My Domain, etc.)</li>
-                            <li>Enlaces de instalación (Sandbox/Prod)</li>
-                            <li>Configuración post-instalación (PermSets)</li>
-                            <li>FAQ</li>
-                        </ul>
+                
+                <p class="text-gray-600 mb-8">El éxito de un paquete global no solo reside en su código, sino en su capacidad de ser adoptado sin fricciones. La documentación es el puente entre el desarrollo y el negocio.</p>
+
+                <!-- 6.1 Inicio del Proyecto -->
+                <div class="mb-10">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">6.1. Inicio del Proyecto (Solicitud de Repositorio)</h3>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-start">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4 text-[#1464A5]">
+                            <i class="fa-solid fa-file-contract text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-2">Para solicitar la creación del repositorio al equipo de arquitectura, es obligatorio presentar:</p>
+                            <ul class="text-sm text-gray-700 space-y-2 list-disc ml-4">
+                                <li><strong>MSA (Master Service Agreement)</strong> del proyecto aprobado.</li>
+                                <li><strong>Draft de Diseño Técnico (DT):</strong> Documento inicial con la arquitectura Salesforce propuesta, enviado al buzón del equipo de Componentes Globales.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="bg-gray-50 p-6 rounded-lg">
-                        <h3 class="font-bold text-gray-800 mb-2">Changelog.md</h3>
-                        <p class="text-sm text-gray-600 mb-2">Ejemplo v1.2.0 (Beta):</p>
-                        <ul class="text-sm text-gray-600 font-mono">
-                            <li>[Feature] Añadido LWC impuestos</li>
-                            <li>[Fix] Error trigger cuentas</li>
-                            <li>[Security] PublicHelper -> with sharing</li>
-                        </ul>
+                </div>
+
+                <!-- 6.2 Proceso de Pull Request -->
+                <div class="mb-10">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">6.2. Proceso de Pull Request (PR)</h3>
+                    <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex items-start">
+                        <div class="bg-purple-100 p-3 rounded-full mr-4 text-purple-600">
+                            <i class="fa-solid fa-code-pull-request text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-2">Antes de fusionar código a ramas principales, se debe notificar por correo al equipo responsable:</p>
+                            <ul class="text-sm text-gray-700 space-y-2 list-disc ml-4">
+                                <li>Adjuntar el <strong>DT Final</strong> del componente actualizado.</li>
+                                <li>
+                                    <strong>Si es una iteración (Post-Beta):</strong> No es necesario re-enviar todo, basta con explicar en el cuerpo del correo los cambios específicos (Diff) realizados desde la última Beta.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6.3 README -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">6.3. El README (La Cara del Producto)</h3>
+                    <p class="text-sm text-gray-600 mb-4">
+                        El <code>README.md</code> es el manual de instrucciones para quien va a implantar el componente. Debe ser exhaustivo y actualizarse con cada versión nueva para evitar bloqueos.
+                    </p>
+
+                    <div class="bg-gray-50 border border-gray-300 rounded-lg overflow-hidden">
+                        <div class="bg-gray-100 px-4 py-2 border-b border-gray-300 font-bold text-gray-700 text-sm flex items-center">
+                            <i class="fa-solid fa-list-check mr-2"></i> Secciones Obligatorias del README
+                        </div>
+                        <div class="p-4 grid md:grid-cols-2 gap-4">
+                            <ul class="space-y-2 text-sm text-gray-600 list-disc ml-4">
+                                <li><strong>Description:</strong> Qué hace el componente (Resumen ejecutivo).</li>
+                                <li><strong>Why This Component:</strong> Valor de negocio que aporta.</li>
+                                <li><strong>Mobility Considerations:</strong> Comportamiento en App Móvil/Tablet.</li>
+                                <li><strong>Installation:</strong> Links de instalación (Sandbox/Prod) y password.</li>
+                                <li><strong>Configuration:</strong> Setup necesario post-instalación.</li>
+                            </ul>
+                            <ul class="space-y-2 text-sm text-gray-600 list-disc ml-4">
+                                <li><strong>Features:</strong> Listado de funcionalidades clave.</li>
+                                <li><strong>Step-by-step configuration:</strong> Guía visual paso a paso.</li>
+                                <li><strong>Component Preview:</strong> Screenshots o GIFs del componente funcionando.</li>
+                                <li><strong>Technical Documentation:</strong> Enlace al DT o detalles de arquitectura.</li>
+                                <li><strong>Scratch Installation:</strong> Comandos para desplegar en local.</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>
