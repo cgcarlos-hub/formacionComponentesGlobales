@@ -183,10 +183,6 @@
                         <span class="truncate">6. Documentación</span>
                     </a>
                     
-                    <div class="pt-4 pb-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Mantenimiento</div>
-                    <a href="#setup-web" class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900">
-                        <span class="truncate">Setup de esta Guía</span>
-                    </a>
                 </nav>
             </div>
         </aside>
@@ -1296,126 +1292,28 @@ Date fechaProceso = (Date) myObject.get(campoFechaLocal);</code></pre>
 
                 <!-- 4.1 Apex Test -->
                 <div class="mb-12">
-                    <h3 class="text-xl font-bold mb-4 text-gray-800">4.1. Apex Test: El Reto de Custom Metadata</h3>
+                    <h3 class="text-xl font-bold mb-4 text-gray-800">4.1. Apex Test: Cobertura y Estabilidad</h3>
                     
-                    <p class="text-gray-600 mb-6 text-sm">
-                        En un Paquete Gestionado, cumplir el 75% de cobertura es solo el principio. El verdadero desafío es manejar la configuración (Custom Metadata) en los tests, ya que Salesforce <strong>no permite insertar registros de metadata (<code>__mdt</code>) mediante DML</strong> en un contexto de prueba.
-                    </p>
-
-                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg mb-8">
-                        <h5 class="text-red-800 font-bold text-sm mb-1">El Problema de la Dependencia</h5>
-                        <p class="text-xs text-red-700">
-                            Si tu código Apex hace una query directa (<code>SELECT ... FROM MyMetadata__mdt</code>) esperando encontrar un token o una URL, y ese registro no existe en la Org del cliente (porque es configuración), <strong>el test fallará</strong> al desplegar.
+                    <div class="prose text-gray-600 mb-6 space-y-4 text-sm">
+                        <p>
+                            Las clases de test en Apex son fundamentales no solo para validar la lógica de negocio, sino porque son un requisito estricto de la plataforma para poder desplegar a producción o crear paquetes. Salesforce exige un mínimo del <strong>75% de cobertura de código</strong>.
+                        </p>
+                        <p>
+                            <strong>Recomendación Estratégica:</strong> No te conformes con el 75%. Es vital apuntar a un porcentaje mayor (85-90%). La razón es simple: cualquier modificación futura en una clase o trigger puede aumentar el número de líneas de código totales, diluyendo el porcentaje de cobertura. Si vives al límite del 75%, un pequeño cambio te obligará a refactorizar tus tests solo para poder subir el código, perdiendo agilidad.
                         </p>
                     </div>
 
-                    <h4 class="font-bold text-[#072146] mb-4 text-lg">Estrategias de Solución</h4>
-
-                    <div class="grid md:grid-cols-2 gap-8">
-                        
-                        <!-- Opción A -->
-                        <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm relative overflow-hidden">
-                            <div class="absolute top-0 right-0 bg-gray-100 text-gray-500 text-[10px] px-2 py-1 font-bold rounded-bl uppercase">Nivel Básico</div>
-                            <h5 class="font-bold text-gray-800 mb-3">Opción A: Seed Data (Paquetizar el Registro)</h5>
-                            <p class="text-sm text-gray-600 mb-4">
-                                Incluimos el registro de configuración dentro del paquete para que "viaje" a la org del cliente.
-                            </p>
-                            
-                            <div class="space-y-3">
-                                <div class="flex items-start">
-                                    <i class="fa-solid fa-check text-green-500 mt-1 mr-2 text-xs"></i>
-                                    <div class="text-xs text-gray-600"><strong>Ventaja:</strong> Rápido. El test pasa porque el dato existe físicamente.</div>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fa-solid fa-xmark text-red-500 mt-1 mr-2 text-xs"></i>
-                                    <div class="text-xs text-gray-600"><strong>Desventaja:</strong> "Polución" de datos. Introduces registros basura que el cliente quizás no quiere.</div>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fa-solid fa-lock text-orange-500 mt-1 mr-2 text-xs"></i>
-                                    <div class="text-xs text-gray-600"><strong>Riesgo:</strong> Los registros paquetizados son <em>Read-Only</em> para el suscriptor. Además, son difíciles de borrar en futuras versiones.</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Opción B -->
-                        <div class="bg-white p-6 rounded-xl border-2 border-[#1464A5] shadow-md relative overflow-hidden">
-                            <div class="absolute top-0 right-0 bg-[#1464A5] text-white text-[10px] px-2 py-1 font-bold rounded-bl uppercase">Recomendado</div>
-                            <h5 class="font-bold text-[#072146] mb-3">Opción B: Inyección de Dependencias</h5>
-                            <p class="text-sm text-gray-600 mb-4">
-                                Utilizamos una "Capa Selectora" o Wrapper para aislar la base de datos del código lógico.
-                            </p>
-                            
-                            <div class="space-y-3">
-                                <div class="flex items-start">
-                                    <i class="fa-solid fa-check text-green-500 mt-1 mr-2 text-xs"></i>
-                                    <div class="text-xs text-gray-600"><strong>Ventaja:</strong> Limpio y escalable. Permite "Mockear" (simular) datos en memoria sin DML.</div>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fa-solid fa-check text-green-500 mt-1 mr-2 text-xs"></i>
-                                    <div class="text-xs text-gray-600"><strong>Flexibilidad:</strong> No dependes de datos físicos en la org.</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Code Snippet for Option B -->
-                    <div class="mt-8">
-                        <h5 class="font-bold text-gray-800 mb-2 text-sm">Implementación del Patrón Selector (Opción B)</h5>
-                        <div class="bg-[#072146] rounded-lg overflow-hidden shadow-md code-block">
-                            <div class="bg-[#04152d] px-4 py-2 flex justify-between items-center text-xs text-gray-400">
-                                <span>MetadataSelector.cls & Test</span>
-                                <button class="copy-btn bg-gray-700 hover:bg-gray-600 text-white px-2 py-1 rounded text-xs" onclick="copyToClipboard(this)">Copiar</button>
-                            </div>
-                            <pre class="p-4 overflow-x-auto text-sm text-green-200"><code>// 1. Clase Virtual Selectora (Código Principal)
-public virtual class MetadataSelector {
-    @TestVisible
-    private static MetadataSelector instance;
-
-    public static MetadataSelector getInstance() {
-        if (instance == null) instance = new MetadataSelector();
-        return instance;
-    }
-
-    // Método que hace la query real
-    public virtual MySetting__mdt getSetting() {
-        return [SELECT Value__c FROM MySetting__mdt LIMIT 1];
-    }
-}
-
-// 2. Uso en tu lógica de negocio
-public void miMetodoDeNegocio() {
-    // En lugar de [SELECT...], usamos el selector
-    MySetting__mdt config = MetadataSelector.getInstance().getSetting();
-    // ... lógica ...
-}
-
-// 3. Clase de Test (El Truco)
-@IsTest
-private class MiTest {
-    // Extendemos el selector para sobrescribir el método
-    class MockSelector extends MetadataSelector {
-        public override MySetting__mdt getSetting() {
-            // Devolvemos un registro falso creado en memoria (JSON trick)
-            return (MySetting__mdt) JSON.deserialize(
-                '{"Value__c": "TestValue"}', MySetting__mdt.class
-            );
-        }
-    }
-
-    @IsTest
-    static void testLogic() {
-        // Inyectamos el Mock
-        MetadataSelector.instance = new MockSelector();
-        
-        // Ejecutamos la lógica, que usará el dato falso
-        Test.startTest();
-        new MiClaseNegocio().miMetodoDeNegocio();
-        Test.stopTest();
-        
-        // Assert...
-    }
-}</code></pre>
-                        </div>
+                    <!-- Consejo Custom Metadata -->
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg">
+                        <h5 class="text-blue-900 font-bold text-sm mb-2 flex items-center">
+                            <i class="fa-solid fa-circle-info mr-2"></i> Consejo: Testing con Custom Metadata
+                        </h5>
+                        <p class="text-xs text-blue-800 leading-relaxed mb-2">
+                            A diferencia de los objetos estándar, <strong>no se pueden generar registros de Custom Metadata (<code>__mdt</code>) en una clase test</strong> (Salesforce no permite DML sobre metadatos en tiempo de ejecución). Esto significa que tu test dependerá de datos reales.
+                        </p>
+                        <p class="text-xs text-blue-800 leading-relaxed">
+                            <strong>Implicación:</strong> Para que tus tests pasen en cualquier entorno (fuera de tu scratch original), <strong>debes paquetizar el registro de Custom Metadata</strong> que utiliza el test. Sin ese registro físico instalado, el test fallará. Recuerda configurar el tipo de metadato como público para permitir que, aunque tú entregues un registro base, los administradores puedan ver y gestionar la configuración según sus necesidades.
+                        </p>
                     </div>
                 </div>
 
@@ -1558,45 +1456,6 @@ private class MiTest {
                 </div>
             </section>
 
-            <!-- Module 5: Errors -->
-            <section id="mod5" class="mb-16 scroll-mt-20">
-                <div class="border-b border-gray-200 pb-4 mb-6">
-                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
-                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-triangle-exclamation"></i></span>
-                        Módulo 5: Troubleshooting
-                    </h2>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Error</th>
-                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Causa</th>
-                                <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Solución</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                                <td class="py-3 px-4 text-sm font-medium text-gray-900">Attempt to de-reference a null object</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">Faltan Custom Settings</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">Post Install Script para inicializar config.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 text-sm font-medium text-gray-900">LWC "Component not found"</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">Referencia sin namespace</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">Usar <code>namespace-componente</code>.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3 px-4 text-sm font-medium text-gray-900">Error CPU Time Limit</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">Código ineficiente</td>
-                                <td class="py-3 px-4 text-sm text-gray-600">Pasar a Asíncrono (Queueable/Batch).</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
             <!-- Module 6: Documentation -->
             <section id="mod6" class="mb-16 scroll-mt-20">
                 <div class="border-b border-gray-200 pb-4 mb-6">
@@ -1674,86 +1533,7 @@ private class MiTest {
                     </div>
                 </div>
             </section>
-
-            <!-- Paquetizables -->
-            <section id="paquetizables" class="mb-16 scroll-mt-20">
-                <div class="border-b border-gray-200 pb-4 mb-6">
-                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
-                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-box-open"></i></span>
-                        ¿Qué se puede empaquetar?
-                    </h2>
-                </div>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div class="border border-green-200 bg-green-50 rounded-xl p-6">
-                        <h3 class="text-green-800 font-bold mb-4 flex items-center"><i class="fa-solid fa-check-circle mr-2"></i> SÍ se puede</h3>
-                        <ul class="space-y-2 text-green-900 text-sm">
-                            <li>Apex, Triggers, LWC, Aura</li>
-                            <li>Custom Objects, Fields</li>
-                            <li>Permission Sets</li>
-                            <li>Custom Metadata Types</li>
-                            <li>Flows</li>
-                        </ul>
-                    </div>
-                    <div class="border border-red-200 bg-red-50 rounded-xl p-6">
-                        <h3 class="text-red-800 font-bold mb-4 flex items-center"><i class="fa-solid fa-times-circle mr-2"></i> NO se puede (o cuidado)</h3>
-                        <ul class="space-y-2 text-red-900 text-sm">
-                            <li>Standard Object Layouts</li>
-                            <li>Assignment Rules</li>
-                            <li>Datos (Registros reales)</li>
-                            <li>Connected Apps</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Setup de esta Guía (New Section) -->
-            <section id="setup-web" class="mb-16 scroll-mt-20">
-                <div class="border-b border-gray-200 pb-4 mb-6">
-                    <h2 class="text-3xl font-bold text-[#072146] flex items-center">
-                        <span class="bg-blue-50 text-[#1464A5] rounded-lg p-2 mr-3 text-xl"><i class="fa-solid fa-laptop-code"></i></span>
-                        Setup Local de esta Documentación
-                    </h2>
-                </div>
-                
-                <p class="text-gray-600 mb-6">Instrucciones para que el equipo pueda editar y mantener esta guía actualizada utilizando VS Code.</p>
-
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                    <div class="p-6 grid md:grid-cols-3 gap-6">
-                        <!-- Paso 1 -->
-                        <div class="relative">
-                            <div class="flex items-center mb-4">
-                                <span class="bg-[#1464A5] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">1</span>
-                                <h3 class="font-bold text-gray-800">Proyecto Local</h3>
-                            </div>
-                            <p class="text-sm text-gray-600 mb-2">Crea una carpeta en tu escritorio:</p>
-                            <code class="block bg-gray-100 p-2 rounded text-xs font-mono text-gray-700">/Escritorio/Formacion_Componentes</code>
-                        </div>
-
-                        <!-- Paso 2 -->
-                        <div class="relative">
-                            <div class="flex items-center mb-4">
-                                <span class="bg-[#1464A5] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">2</span>
-                                <h3 class="font-bold text-gray-800">Visual Studio Code</h3>
-                            </div>
-                            <p class="text-sm text-gray-600 mb-2">Abre la carpeta en VS Code y crea el archivo principal:</p>
-                            <code class="block bg-gray-100 p-2 rounded text-xs font-mono text-gray-700">index.html</code>
-                        </div>
-
-                        <!-- Paso 3 -->
-                        <div class="relative">
-                            <div class="flex items-center mb-4">
-                                <span class="bg-[#2DCCCD] text-[#072146] w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">3</span>
-                                <h3 class="font-bold text-gray-800">Live Preview</h3>
-                            </div>
-                            <p class="text-sm text-gray-600 mb-2">Instala la extensión <strong>Live Server</strong> para ver los cambios en tiempo real.</p>
-                            <div class="mt-2 text-xs text-blue-600 bg-blue-50 p-2 rounded border border-blue-100">
-                                <i class="fa-solid fa-lightbulb mr-1"></i> Tip: Click derecho en el HTML -> "Open with Live Server"
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
+            
             <!-- Quote -->
             <section class="mb-8">
                 <blockquote class="border-l-4 border-[#1464A5] pl-6 py-4 italic text-gray-600 bg-gray-50 rounded-r-lg">
